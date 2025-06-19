@@ -3336,6 +3336,7 @@ MonoBehaviour:
   _browserPanel: {fileID: 901628834}
   _hostPanel: {fileID: 462044741}
   _connectButton: {fileID: 336946745}
+  _quitButton: {fileID: 1294693612}
   _goToHostButton: {fileID: 658513332}
   _hostButton: {fileID: 1738713239}
   _connectingText: {fileID: 1315352473}

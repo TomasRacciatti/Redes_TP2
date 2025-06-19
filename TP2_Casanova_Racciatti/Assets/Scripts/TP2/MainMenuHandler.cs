@@ -17,6 +17,7 @@ public class MainMenuHandler : MonoBehaviour
     
     [Header("Buttons")]
     [SerializeField] private Button _connectButton;
+    [SerializeField] private Button _quitButton;
     [SerializeField] private Button _goToHostButton;
     [SerializeField] private Button _hostButton;
     
