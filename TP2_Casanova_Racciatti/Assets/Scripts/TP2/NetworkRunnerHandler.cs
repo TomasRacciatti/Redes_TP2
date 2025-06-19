@@ -73,7 +73,21 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
     
     public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
     {
-        
+        //Si no hay ninguna sala, creo
+        if (sessionList.Count == 0)
+        {
+            CreateGame("Room 0", "Game");
+        }
+        else // Me uno
+        {
+            foreach (var sessionInfo in sessionList)
+            {
+                if (sessionInfo.PlayerCount >= sessionInfo.MaxPlayers) continue;
+                
+                JoinGame(sessionInfo);
+                return;
+            }
+        }
     }
     
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player) { }
