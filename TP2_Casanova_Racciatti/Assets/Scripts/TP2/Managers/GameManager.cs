@@ -130,7 +130,7 @@ public class GameManager : NetworkBehaviour
         UpdateUI();
     }
 
-    [Rpc(RpcSources.All, RpcTargets.All)] // EL source no deberia ser el SA?
+    [Rpc(RpcSources.All, RpcTargets.All)]
     private void RPC_StartGame(PlayerRef firstAuthority, int firstTurnId)
     {
         StartRound(firstAuthority, firstTurnId);
@@ -144,7 +144,7 @@ public class GameManager : NetworkBehaviour
         RPC_AdvanceTurn();
     }
 
-    [Rpc(RpcSources.All, RpcTargets.All)] // EL source no deberia ser el SA?
+    [Rpc(RpcSources.All, RpcTargets.All)] 
     private void RPC_AdvanceTurn()
     {
         //Debug.Log($"[RPC_AdvanceTurn] invoked on {Runner.LocalPlayer} — old turn: {currentTurnId}");
@@ -186,10 +186,10 @@ public class GameManager : NetworkBehaviour
         RPC_ResolveBluff();
     }
 
-    [Rpc(RpcSources.All, RpcTargets.All)] // La fuente deberia ser all o SA?
+    [Rpc(RpcSources.All, RpcTargets.All)]
     private void RPC_ResolveBluff()
     {
-        if (!HasStateAuthority) return; // Duda
+        if (!HasStateAuthority) return;
 
         var claimResult = CheckClaim(currentClaimFace, currentClaimQuantity);
 
