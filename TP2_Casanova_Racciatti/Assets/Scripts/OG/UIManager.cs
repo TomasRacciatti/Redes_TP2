@@ -12,12 +12,8 @@ public class UIManager : MonoBehaviour
     [Header("Player Dice UI")] [SerializeField]
     private List<DieDisplay> _rolledDiceDisplays;
 
-    [Header("Claim Dice UI")] [SerializeField]
-    private DieDisplay _currentClaimDie;
-    //[SerializeField] private DieDisplay _raiseClaimDie;
-
     [Header("Claim")] [SerializeField] private TextMeshProUGUI _claimAmountText;
-    [SerializeField] private DieDisplay _claimDie;
+    [SerializeField] private DieDisplay _currentClaimDie;
 
     [Header("Turn")] [SerializeField] private GameObject _turnOverlay;
     [SerializeField] private TextMeshProUGUI _turnText;

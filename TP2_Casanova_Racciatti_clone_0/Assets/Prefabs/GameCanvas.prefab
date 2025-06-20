@@ -2989,10 +2989,10 @@ RectTransform:
   - {fileID: 5247567420401865334}
   m_Father: {fileID: 1003674414413764110}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -122.1899, y: -10.306099}
-  m_SizeDelta: {x: -470.74503, y: -40.39737}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -122.18991, y: -10.306099}
+  m_SizeDelta: {x: 159.25497, y: 191.60263}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1826234652677411523
 CanvasRenderer:
@@ -3070,7 +3070,7 @@ GameObject:
   - component: {fileID: 5350299481878365003}
   - component: {fileID: 252785516725715407}
   m_Layer: 5
-  m_Name: NotYourTurn
+  m_Name: NotYourTurnBG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
