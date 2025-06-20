@@ -68,36 +68,7 @@ public class PlayerController : NetworkBehaviour
     {
         RolledDice = new List<int>(diceValues);
     }
-
-    /*
-    public void LoseOneDie()
-    {
-        RemainingDice--;
-
-        if (RemainingDice <= 0 && HasInputAuthority)
-        {
-            GameManager.Instance.RPC_GameOver(Runner.LocalPlayer);
-            //Runner.Despawn(Object);
-            return;
-        }
-
-        if (RolledDice.Count > RemainingDice)
-            RolledDice.RemoveAt(RolledDice.Count - 1);
-
-        if (HasInputAuthority)
-        {
-            UIManager.Instance.UpdateRolledDice(RolledDice);
-        }
-    }
-
-
-    [Rpc(RpcSources.All, RpcTargets.InputAuthority)]
-    public void RPC_LoseOneDieLocal()
-    {
-        LoseOneDie();
-        UIManager.Instance.UpdateDiceCounts(GameManager.Instance.Players.ToList());
-    }
-    */
+    
     
     [Rpc(RpcSources.StateAuthority, RpcTargets.InputAuthority)]
     public void RPC_NotifyDiceLost(int newRemaining)
@@ -108,6 +79,5 @@ public class PlayerController : NetworkBehaviour
             RolledDice.RemoveAt(RolledDice.Count - 1);
 
         UIManager.Instance.UpdateRolledDice(RolledDice);
-        //UIManager.Instance.UpdateDiceCounts(GameManager.Instance.Players.ToList());
     }
 }
