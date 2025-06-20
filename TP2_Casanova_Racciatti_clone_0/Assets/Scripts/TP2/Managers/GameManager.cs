@@ -226,10 +226,13 @@ public class GameManager : NetworkBehaviour
         int claimQty = currentClaimQuantity;
         int claimFace = currentClaimFace;
         var dist = GetDiceDistribution();
+        int[] distArray = Enumerable.Range(1, 6)
+            .Select(face => dist.TryGetValue(face, out var qty) ? qty : 0)
+            .ToArray();
 
         UIManager.Instance.StartCoroutine(
             UIManager.Instance.ShowSummaryControlled(dist, delayBetween: 0.05f,
-                callback: () => { RPC_ShowRoundSummary(claimQty, claimFace, loserID); }
+                callback: () => { RPC_ShowRoundSummary(claimQty, claimFace, loserID, distArray); }
             )
         );
 
@@ -250,10 +253,15 @@ public class GameManager : NetworkBehaviour
         RPC_StartGame(loser.Object.InputAuthority, loserID);
     }
 
-    [Rpc(RpcSources.All, RpcTargets.All)]
-    private void RPC_ShowRoundSummary(int claimQty, int claimFace, int loserId)
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    private void RPC_ShowRoundSummary(int claimQty, int claimFace, int loserId, int[] distribution)
     {
-        var dist = GetDiceDistribution();
+        var dist = new Dictionary<int, int>();
+        for (int i = 1; i <= 6; i++)
+        {
+            dist[i] = distribution[i - 1];
+        }
+
         UIManager.Instance.ShowRoundSummary(dist, claimQty, claimFace, loserId);
     }
 
