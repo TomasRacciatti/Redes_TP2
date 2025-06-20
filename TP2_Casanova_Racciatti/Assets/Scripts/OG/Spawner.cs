@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Fusion;
 
-public class PlayerSpawner : SimulationBehaviour, IPlayerJoined
+public class Spawner : SimulationBehaviour, IPlayerJoined
 {
     [SerializeField] NetworkPrefabRef _playerPrefab;
     private bool _hasSpawned;
