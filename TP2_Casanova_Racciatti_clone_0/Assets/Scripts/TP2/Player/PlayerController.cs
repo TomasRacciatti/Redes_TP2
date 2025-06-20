@@ -59,12 +59,11 @@ public class PlayerController : NetworkBehaviour
         }
         
         RPC_SyncRolledDice(RolledDice.ToArray());
-
-        if (HasInputAuthority)
-            UIManager.Instance.UpdateRolledDice(RolledDice);
+        
+        UIManager.Instance.UpdateRolledDice(RolledDice);
     }
     
-    [Rpc(RpcSources.InputAuthority, RpcTargets.Proxies)]
+    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
     private void RPC_SyncRolledDice(int[] diceValues)
     {
         RolledDice = new List<int>(diceValues);

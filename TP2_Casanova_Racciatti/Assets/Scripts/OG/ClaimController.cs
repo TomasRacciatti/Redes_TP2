@@ -75,7 +75,7 @@ public class ClaimController : MonoBehaviour
     {
         if (amountText != null)
             amountText.text = _amount.ToString();
-        if (_face != null)
+        if (_face <= 1 && _face >= 6)
             newClaimDie.ShowValue(_face);
     }
 }
