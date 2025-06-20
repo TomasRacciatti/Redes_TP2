@@ -43,7 +43,10 @@ public class GameManager : NetworkBehaviour
             //Debug.Log($"[GameManager] Registered player {player.Object.InputAuthority}");
         }
 
-        TryStartGame();
+        if (HasStateAuthority)
+        {
+            TryStartGame();
+        }
     }
 
     private void TryStartGame()
@@ -67,7 +70,7 @@ public class GameManager : NetworkBehaviour
         var active = _players
             .Where(p => p.IsAlive)
             .OrderBy(p => p.Object.InputAuthority.RawEncoded);
-            //.ToList();
+        //.ToList();
 
         foreach (var player in active)
         {
@@ -89,11 +92,12 @@ public class GameManager : NetworkBehaviour
         var championRaw = _players
             .Min(p => p.Object.InputAuthority.RawEncoded);
 
-        if (Runner.LocalPlayer.RawEncoded == championRaw)
+        if (Runner.LocalPlayer.RawEncoded == championRaw && HasStateAuthority)
         {
             var alive = ActivePlayers();
 
-            int idx = UnityEngine.Random.Range(0, alive.Count);
+            int idx = UnityEngine.Random.Range(0,
+                alive.Count); // Si tengo mas de 2 jugadores, esto lo voy a tener que settear tambien cuando muere un jugador
             var first = alive[idx];
 
             RPC_StartGame(first.Object.InputAuthority, first.myTurnId);
@@ -115,14 +119,18 @@ public class GameManager : NetworkBehaviour
 
         foreach (var player in _players)
         {
-            player.RollDice();
+            if (HasStateAuthority) // Duda. Si lo activo, el p2 solo saca generala de 1. Si lo desactivo tira bien pero la distribucion esta mal
+                player.RollDice();
+
+            if (player.HasInputAuthority)
+                UIManager.Instance.UpdateRolledDice(player.RolledDice);
         }
 
         UIManager.Instance.UpdateDiceCounts(_players);
         UpdateUI();
     }
 
-    [Rpc(RpcSources.All, RpcTargets.All)]
+    [Rpc(RpcSources.All, RpcTargets.All)] // EL source no deberia ser el SA?
     private void RPC_StartGame(PlayerRef firstAuthority, int firstTurnId)
     {
         StartRound(firstAuthority, firstTurnId);
@@ -136,7 +144,7 @@ public class GameManager : NetworkBehaviour
         RPC_AdvanceTurn();
     }
 
-    [Rpc(RpcSources.All, RpcTargets.All)]
+    [Rpc(RpcSources.All, RpcTargets.All)] // EL source no deberia ser el SA?
     private void RPC_AdvanceTurn()
     {
         //Debug.Log($"[RPC_AdvanceTurn] invoked on {Runner.LocalPlayer} — old turn: {currentTurnId}");
@@ -157,17 +165,16 @@ public class GameManager : NetworkBehaviour
     {
         UIManager.Instance.UpdateTurnIndicator();
         UIManager.Instance.UpdateClaim(currentClaimQuantity, currentClaimFace);
-        //UIManager.Instance.UpdateDiceCounts(_players);
     }
 
     [Rpc(RpcSources.All, RpcTargets.All)]
-    public void RPC_SetClaim(int quantity, int face)
+    public void RPC_SetClaim(int quantity, int face) // Lo llamamos en ClaimController que lo llama por boton
     {
         currentClaimQuantity = quantity;
         currentClaimFace = face;
         _isFirstTurn = false;
         _lastTurnID = currentTurnId;
-
+        
         RequestNextTurn();
     }
 
@@ -179,11 +186,13 @@ public class GameManager : NetworkBehaviour
         RPC_ResolveBluff();
     }
 
-    [Rpc(RpcSources.All, RpcTargets.Proxies)]
+    [Rpc(RpcSources.All, RpcTargets.All)] // La fuente deberia ser all o SA?
     private void RPC_ResolveBluff()
     {
+        if (!HasStateAuthority) return; // Duda
+
         var claimResult = CheckClaim(currentClaimFace, currentClaimQuantity);
-        
+
         int face = claimResult.Item1;
         int actualQty = claimResult.Item2;
         bool honest = claimResult.Item3;
@@ -202,7 +211,7 @@ public class GameManager : NetworkBehaviour
         bool honest = actualQty >= claimQuantity;
         return Tuple.Create(claimFace, actualQty, honest);
     }
-    
+
     public List<Tuple<int, int>> GetPlayerDiceTuples()
     {
         return _players
@@ -219,10 +228,8 @@ public class GameManager : NetworkBehaviour
         var dist = GetDiceDistribution();
 
         UIManager.Instance.StartCoroutine(
-            UIManager.Instance.ShowSummaryControlled(dist, delayBetween: 0.05f, callback: () =>
-                {
-                    RPC_ShowRoundSummary(claimQty, claimFace, loserID);
-                }
+            UIManager.Instance.ShowSummaryControlled(dist, delayBetween: 0.05f,
+                callback: () => { RPC_ShowRoundSummary(claimQty, claimFace, loserID); }
             )
         );
 
@@ -248,19 +255,18 @@ public class GameManager : NetworkBehaviour
 
     private Dictionary<int, int> GetDiceDistribution()
     {
-        if (!_players.Any(player => player.IsAlive))
+        if (!HasStateAuthority) //Duda
             return new Dictionary<int, int>();
 
         return _players
             .Where(p => p.IsAlive)
             .SelectMany(p => p.RolledDice)
             .Aggregate(new Dictionary<int, int>(), (dict, face) =>
-                {
-                    dict.TryAdd(face, 0);
-                    dict[face]++;
-                    return dict;
-                }
-            );
+            {
+                dict.TryAdd(face, 0);
+                dict[face]++;
+                return dict;
+            });
     }
 
     /*
@@ -313,7 +319,7 @@ public class GameManager : NetworkBehaviour
         {
             RPC_Win(_players[0].Object.StateAuthority);
         }
-        
+
         // Agregar un boton para desconectarse. No hace falta que sea aca, pero la logica es:
         /*
         if (!Object.HasInputAuthority)
