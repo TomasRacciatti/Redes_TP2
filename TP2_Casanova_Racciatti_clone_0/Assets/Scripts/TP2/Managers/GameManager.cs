@@ -237,10 +237,15 @@ public class GameManager : NetworkBehaviour
         yield return new WaitForSeconds(3.5f);
 
         var loser = _players.First(p => p.myTurnId == loserID);
-        loser.LoseOneDie();
-
-        if (Runner.LocalPlayer != loser.Object.InputAuthority)
-            loser.RPC_LoseOneDieLocal();
+        
+        loser.RemainingDice--;
+        
+        if (loser.RemainingDice <= 0)
+        {
+            RPC_GameOver(loser.Object.InputAuthority);
+        }
+        
+        loser.RPC_NotifyDiceLost(loser.RemainingDice);
 
         RPC_StartGame(loser.Object.InputAuthority, loserID);
     }
