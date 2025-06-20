@@ -11,12 +11,15 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
     [SerializeField] private NetworkRunner _runnerPrefab;
     private NetworkRunner _currentRunner;
 
+    public event Action OnLobbyJoined;
+    public event Action<List<SessionInfo>> OnSessionListUpdate; 
+
     private void Start()
     {
         JoinLobby();
     }
     
-    private void JoinLobby()
+    public void JoinLobby()
     {
         if (_currentRunner)
             Destroy(_currentRunner.gameObject);
@@ -39,6 +42,7 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
         }
         
         Debug.Log($"[Custom Msg] Joined Lobby");
+        OnLobbyJoined?.Invoke();
     }
     
     public async void CreateGame(string sessionName, string sceneName)
@@ -73,6 +77,9 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
     
     public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
     {
+        OnSessionListUpdate?.Invoke(sessionList);
+        
+        /*
         //Si no hay ninguna sala, creo
         if (sessionList.Count == 0)
         {
@@ -88,6 +95,7 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
                 return;
             }
         }
+        */
     }
     
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player) { }
