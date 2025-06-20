@@ -14,10 +14,12 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
     public event Action OnLobbyJoined;
     public event Action<List<SessionInfo>> OnSessionListUpdate; 
 
+    /*
     private void Start()
     {
         JoinLobby();
     }
+    */
     
     public void JoinLobby()
     {
