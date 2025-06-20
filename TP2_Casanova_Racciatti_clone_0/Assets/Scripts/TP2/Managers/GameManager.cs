@@ -119,7 +119,7 @@ public class GameManager : NetworkBehaviour
 
         foreach (var player in _players)
         {
-            if (HasStateAuthority) // Duda. Si lo activo, el p2 solo saca generala de 1. Si lo desactivo tira bien pero la distribucion esta mal
+            if (player.HasInputAuthority)
                 player.RollDice();
 
             if (player.HasInputAuthority)
