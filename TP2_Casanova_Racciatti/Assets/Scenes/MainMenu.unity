@@ -1037,6 +1037,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 675913527}
   m_CullTransparentMesh: 1
+--- !u!1 &790630619
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 790630620}
+  m_Layer: 0
+  m_Name: RegionHandler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &790630620
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 790630619}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &901628834
 GameObject:
   m_ObjectHideFlags: 0
@@ -1046,6 +1077,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 901628835}
+  - component: {fileID: 901628836}
   m_Layer: 5
   m_Name: Browser Panel
   m_TagString: Untagged
@@ -1077,6 +1109,22 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &901628836
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 901628834}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6103b7752c3f7bc4b893ae8cb1eb3b3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _sessionItemPrefab: {fileID: 3360569332475893753, guid: 979a54838bd119f408f29c75a868a9e9, type: 3}
+  _runnerHandler: {fileID: 501146945}
+  _statusText: {fileID: 675913529}
+  _verticalLayout: {fileID: 1853050779}
 --- !u!1 &919236531
 GameObject:
   m_ObjectHideFlags: 0
@@ -3330,7 +3378,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 963ece0879afc1845bc87f9448c9b38c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _runnerHandler: {fileID: 0}
+  _runnerHandler: {fileID: 501146945}
   _mainMenuPanel: {fileID: 1160738060}
   _connectingPanel: {fileID: 1831928164}
   _browserPanel: {fileID: 901628834}
@@ -3816,3 +3864,4 @@ SceneRoots:
   - {fileID: 1288330705}
   - {fileID: 1087500560}
   - {fileID: 1047804997}
+  - {fileID: 790630620}
