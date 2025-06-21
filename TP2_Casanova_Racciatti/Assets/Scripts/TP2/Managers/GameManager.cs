@@ -336,7 +336,7 @@ public class GameManager : NetworkBehaviour
 
         if (_players.Count == 1 && HasStateAuthority)
         {
-            RPC_Win(_players[0].Object.StateAuthority);
+            RPC_Win(_players[0].Object.InputAuthority);
         }
 
         // Agregar un boton para desconectarse. No hace falta que sea aca, pero la logica es:
