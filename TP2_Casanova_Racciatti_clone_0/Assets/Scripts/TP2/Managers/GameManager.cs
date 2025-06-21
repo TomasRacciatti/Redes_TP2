@@ -364,36 +364,6 @@ public class GameManager : NetworkBehaviour
             });
     }
 
-    /*
-    // Original sin Aggregate
-    private Dictionary<int, int> GetDiceDistribution()
-    {
-        Dictionary<int, int> distribution = new();
-
-        foreach (var player in _players)
-        {
-            if (!player.IsAlive) continue;
-
-            foreach (int face in player.RolledDice)
-            {
-                if (!distribution.ContainsKey(face))
-                    distribution[face] = 0;
-
-                distribution[face]++;
-            }
-        }
-
-        // DEBUG para revisar proxies
-        var sb = new System.Text.StringBuilder("[GetDiceDistribution] ");
-        foreach (var kv in distribution)
-            sb.Append($"{kv.Key}→{kv.Value}  ");
-        Debug.Log(sb.ToString());
-
-
-        return distribution;
-    }
-    */
-
     private void RemoveFromList(PlayerController player)
     {
         _players.Remove(player);
