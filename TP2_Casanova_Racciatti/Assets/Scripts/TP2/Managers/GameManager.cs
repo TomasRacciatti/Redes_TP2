@@ -9,6 +9,8 @@ using Unity.VisualScripting;
 public class GameManager : NetworkBehaviour
 {
     public static GameManager Instance { get; private set; }
+    
+    [SerializeField] private PlayerSpawner _playerSpawner;
 
     [Networked] public int currentClaimQuantity { get; set; }
     [Networked] public int currentClaimFace { get; set; }
@@ -26,6 +28,17 @@ public class GameManager : NetworkBehaviour
     private bool _isFirstTurn;
     private bool _gameStarted;
 
+    
+    private void OnEnable()
+    {
+        _playerSpawner.OnPlayerDisconnected += HandlePlayerDisconnected;
+    }
+
+    private void OnDisable()
+    {
+        _playerSpawner.OnPlayerDisconnected -= HandlePlayerDisconnected;
+    }
+    
     private void Awake()
     {
         if (Instance == null)
@@ -33,6 +46,13 @@ public class GameManager : NetworkBehaviour
 
         else
             Destroy(gameObject);
+        
+        _playerSpawner = FindObjectOfType<PlayerSpawner>();
+
+        if (_playerSpawner == null)
+        {
+            Debug.LogError("[GameManager] PlayerSpawner not found in scene!");
+        }
     }
 
     public void RegisterPlayer(PlayerController player)
@@ -62,6 +82,28 @@ public class GameManager : NetworkBehaviour
         int id = 1;
         foreach (var p in ordered)
             p.myTurnId = id++;
+    }
+    
+    public void HandlePlayerDisconnected(PlayerRef player)
+    {
+        if (!HasStateAuthority) return;
+
+        var playerController = GetPlayerController(player);
+        if (playerController != null)
+        {
+            RemoveFromList(playerController);
+        }
+        
+        AssignTurnIDs();
+        
+        if (_players.Count > 1 && playerController.myTurnId == currentTurnId)
+        {
+            var next = _players.First();
+            currentTurnId = next.myTurnId;
+            turnAuthority = next.Object.InputAuthority;
+            
+            RPC_AdvanceTurn(); 
+        }
     }
 
     private IEnumerable<PlayerController> ActivePlayersGenerator()
