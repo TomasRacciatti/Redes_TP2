@@ -77,18 +77,18 @@ public class UIManager : MonoBehaviour
         _playerListText.text = string.Join("\n", lines);
     }
 
-    public void UpdateSessionLobby(List<string> playerNames)
+    public void UpdateSessionLobby(List<PlayerController> players)
     {
         _playerLobbyListText.text = "";
         
         var sb = new System.Text.StringBuilder();
 
-        foreach (var name in playerNames)
+        for (int i = 0; i < players.Count; i++)
         {
-            sb.AppendLine(name);
+            sb.AppendLine($"Player {i + 1}");
         }
         
-        _playerLobbyListText.text = sb.ToString();
+        _playerListText.text = sb.ToString();
     }
 
     public void UpdateRolledDice(List<int> rolledValues)
