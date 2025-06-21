@@ -62,13 +62,21 @@ public class GameManager : NetworkBehaviour
         if (!_players.Contains(player))
         {
             _players.Add(player);
-            UIManager.Instance.UpdateSessionLobby(_players);
+            UpdateLobbyNames();
+        }
+    }
+
+    private void UpdateLobbyNames()
+    {
+        List<string> playerNames = new();
+
+        int index = 1;
+        foreach (var playerRef in Runner.ActivePlayers)
+        {
+            playerNames.Add($"Player {index++}");
         }
 
-        if (HasStateAuthority) // Sacar esto, hacer TryStartGame publica y llamarla con un boton
-        {
-            //TryStartGame();
-        }
+        UIManager.Instance.UpdateSessionLobby(playerNames);
     }
     
     public void OnStartButtonClicked() // Lo llamamos por boton
