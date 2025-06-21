@@ -40,7 +40,6 @@ public class GameManager : NetworkBehaviour
         if (!_players.Contains(player))
         {
             _players.Add(player);
-            //Debug.Log($"[GameManager] Registered player {player.Object.InputAuthority}");
         }
 
         if (HasStateAuthority)
@@ -108,8 +107,6 @@ public class GameManager : NetworkBehaviour
     {
         UIManager.Instance.HideRoundSummary();
 
-        Debug.Log("Round started!");
-
         _isFirstTurn = true;
         currentClaimQuantity = 0;
         currentClaimFace = 1;
@@ -158,8 +155,6 @@ public class GameManager : NetworkBehaviour
     [Rpc(RpcSources.All, RpcTargets.All)] 
     private void RPC_AdvanceTurn()
     {
-        //Debug.Log($"[RPC_AdvanceTurn] invoked on {Runner.LocalPlayer} — old turn: {currentTurnId}");
-
         var alive = ActivePlayers();
 
         int index = alive.FindIndex(p => p.myTurnId == currentTurnId);

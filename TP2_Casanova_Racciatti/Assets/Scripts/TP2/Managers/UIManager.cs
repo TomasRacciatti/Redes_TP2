@@ -44,7 +44,6 @@ public class UIManager : MonoBehaviour
     public void SetPlayerReference(PlayerController player)
     {
         _localPlayer = player;
-        //Debug.Log($"[UIManager] Local player set to turnId={player.myTurnId}");
     }
 
     public void UpdateClaim(int quantity, int face)
@@ -58,8 +57,6 @@ public class UIManager : MonoBehaviour
         if (_localPlayer == null) return;
 
         bool isMyTurn = _localPlayer.myTurnId == GameManager.Instance.currentTurnId;
-
-        //Debug.Log($"[UIManager] MyTurnId: {_localPlayer.myTurnId}, CurrentTurnId: {GameManager.Instance.currentTurnId}, IsMyTurn: {isMyTurn}");
 
         _turnOverlay.SetActive(!isMyTurn);
         _actionButtons.SetActive(isMyTurn);

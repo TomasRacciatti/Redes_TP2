@@ -34,11 +34,11 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
 
         if (!result.Ok)
         {
-            Debug.LogError($"[Custom Error] Unable to join Lobby");
+            //Debug.LogError($"[Custom Error] Unable to join Lobby");
             return;
         }
 
-        Debug.Log($"[Custom Msg] Joined Lobby");
+        //Debug.Log($"[Custom Msg] Joined Lobby");
         OnLobbyJoined?.Invoke();
     }
 
@@ -66,11 +66,11 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
 
         if (!result.Ok)
         {
-            Debug.LogError($"[Custom Error] Unable to Start Game");
+            //Debug.LogError($"[Custom Error] Unable to Start Game");
             return;
         }
 
-        Debug.Log($"[Custom Msg] Game Started");
+        //Debug.Log($"[Custom Msg] Game Started");
     }
 
     public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)

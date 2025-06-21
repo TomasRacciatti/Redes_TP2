@@ -31,7 +31,6 @@ public class PlayerController : NetworkBehaviour
 
         if (HasInputAuthority)
         {
-            //Debug.Log($"[PlayerController] I am the local player. My NetworkObject ID: {Object.Id}");
             UIManager.Instance.SetPlayerReference(this);
         }
 
@@ -40,7 +39,6 @@ public class PlayerController : NetworkBehaviour
 
     private void OnTurnIdChanged()
     {
-        Debug.Log($"[PlayerController] My TurnID is: {myTurnId}");
         if (HasInputAuthority)
         {
             UIManager.Instance?.UpdateTurnIndicator();
@@ -53,29 +51,6 @@ public class PlayerController : NetworkBehaviour
         RolledDice = new List<int>(diceValues);
         UIManager.Instance.UpdateRolledDice(RolledDice);
     }
-
-    /*
-    public void RollDice()
-    {
-        if (!HasInputAuthority)
-            return;
-        
-        RolledDice.Clear();
-        for (int i = 0; i < RemainingDice; i++)
-        {
-            RolledDice.Add(UnityEngine.Random.Range(1, 7));
-        }
-        
-        RPC_SyncRolledDice(RolledDice.ToArray());
-        
-        UIManager.Instance.UpdateRolledDice(RolledDice);
-    }
-    
-    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
-    private void RPC_SyncRolledDice(int[] diceValues)
-    {
-        RolledDice = new List<int>(diceValues);
-    }*/
     
     
     [Rpc(RpcSources.StateAuthority, RpcTargets.InputAuthority)]

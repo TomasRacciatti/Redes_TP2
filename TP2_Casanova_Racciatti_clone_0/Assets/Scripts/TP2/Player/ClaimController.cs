@@ -66,9 +66,6 @@ public class ClaimController : MonoBehaviour
                 gameObject.SetActive(false);
             }
         }
-        else
-            Debug.Log("Invalid claim.");
-        
     }
 
     private void UpdateDisplay()
