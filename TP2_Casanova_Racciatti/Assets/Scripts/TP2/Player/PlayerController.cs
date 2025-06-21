@@ -63,4 +63,10 @@ public class PlayerController : NetworkBehaviour
 
         UIManager.Instance.UpdateRolledDice(RolledDice);
     }
+    
+    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+    public void RPC_RequestAdvanceTurnFromHost()
+    {
+        GameManager.Instance.AdvanceTurnHostAuthoritative();
+    }
 }

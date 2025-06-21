@@ -102,20 +102,21 @@ public class GameManager : NetworkBehaviour
         if (!HasStateAuthority) return;
 
         var playerController = GetPlayerController(player);
+        bool wasCurrentTurn = false;
+        
         if (playerController != null)
         {
+            wasCurrentTurn = playerController.myTurnId == currentTurnId;
             RemoveFromList(playerController);
         }
         
         AssignTurnIDs();
         
-        if (_players.Count > 1 && playerController.myTurnId == currentTurnId)
+        var alive = ActivePlayers();
+        
+        if (wasCurrentTurn || !alive.Any(p => p.myTurnId == currentTurnId))
         {
-            var next = _players.First();
-            currentTurnId = next.myTurnId;
-            turnAuthority = next.Object.InputAuthority;
-            
-            RPC_AdvanceTurn(); 
+            AdvanceTurnHostAuthoritative();
         }
     }
 
@@ -204,29 +205,40 @@ public class GameManager : NetworkBehaviour
         if (Runner.LocalPlayer != turnAuthority)
             return;
 
-        RPC_AdvanceTurn();
+        if (HasStateAuthority)
+        {
+            AdvanceTurnHostAuthoritative();
+        }
+        else
+        {
+            var localPlayer = _players.FirstOrDefault(p => p.HasInputAuthority);
+            localPlayer?.RPC_RequestAdvanceTurnFromHost();
+        }
     }
 
-    [Rpc(RpcSources.All, RpcTargets.All)] 
-    private void RPC_AdvanceTurn()
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    private void RPC_AdvanceTurn(int nextTurnId, PlayerRef nextAuthority)
     {
-        var alive = ActivePlayers();
-
-        if (!alive.Any(p => p.myTurnId == currentTurnId))
-        {
-            currentTurnId = alive[0].myTurnId;
-            turnAuthority = alive[0].Object.InputAuthority;
-            return;
-        }
-        
-        int index = alive.FindIndex(p => p.myTurnId == currentTurnId);
-        int nextIdx = (index + 1) % alive.Count;
-        
-        var next = alive[nextIdx];
-        turnAuthority = next.Object.InputAuthority;
-        currentTurnId = next.myTurnId;
+        currentTurnId = nextTurnId;
+        turnAuthority = nextAuthority;
 
         UpdateUI();
+    }
+    
+    
+    
+    public void AdvanceTurnHostAuthoritative()
+    {
+        var alive = ActivePlayers();
+        if (alive.Count == 0) return;
+
+        int index = alive.FindIndex(p => p.myTurnId == currentTurnId);
+
+        int nextIdx = (index + 1) % alive.Count;
+
+        var next = alive[nextIdx];
+
+        RPC_AdvanceTurn(next.myTurnId, next.Object.InputAuthority);
     }
 
     private void UpdateUI()
@@ -380,7 +392,7 @@ public class GameManager : NetworkBehaviour
         var player = GetPlayerController(client);
         RemoveFromList(player);
         AssignTurnIDs();
-        RPC_AdvanceTurn();
+        AdvanceTurnHostAuthoritative();
 
         if (_players.Count == 1 && HasStateAuthority)
         {
