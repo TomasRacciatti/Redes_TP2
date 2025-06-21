@@ -107,8 +107,9 @@ public class GameManager : NetworkBehaviour
         if (playerController != null)
         {
             wasCurrentTurn = playerController.myTurnId == currentTurnId;
-            RemoveFromList(playerController);
         }
+        
+        RPC_RemovePlayer(player);
         
         AssignTurnIDs();
         
@@ -117,6 +118,17 @@ public class GameManager : NetworkBehaviour
         if (wasCurrentTurn || !alive.Any(p => p.myTurnId == currentTurnId))
         {
             AdvanceTurnHostAuthoritative();
+        }
+    }
+    
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    private void RPC_RemovePlayer(PlayerRef playerRef)
+    {
+        var playerController = GetPlayerController(playerRef);
+        if (playerController != null)
+        {
+            RemoveFromList(playerController);
+            UIManager.Instance.UpdateDiceCounts(_players);
         }
     }
 
