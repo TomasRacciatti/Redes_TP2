@@ -64,13 +64,13 @@ public class GameManager : NetworkBehaviour
 
         if (HasStateAuthority) // Sacar esto, hacer TryStartGame publica y llamarla con un boton
         {
-            TryStartGame();
+            //TryStartGame();
         }
     }
 
-    private void TryStartGame()
+    public void TryStartGame() // Lo llamamos por boton
     {
-        if (_gameStarted || _players.Count < 2) return;
+        if (_gameStarted || _players.Count < 2) return; // Necesito que el boton solo lo pueda apretar el que tiene SA
         _gameStarted = true;
         StartCoroutine(DelayedStart());
     }
