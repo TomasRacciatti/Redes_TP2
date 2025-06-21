@@ -129,6 +129,7 @@ public class GameManager : NetworkBehaviour
         {
             RemoveFromList(playerController);
             UIManager.Instance.UpdateDiceCounts(_players);
+            UIManager.Instance.UpdateSessionLobby(_players);
         }
     }
 

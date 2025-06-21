@@ -85,7 +85,7 @@ public class UIManager : MonoBehaviour
 
         for (int i = 0; i < players.Count; i++)
         {
-            sb.AppendLine($"Player {i + 1}");
+            sb.AppendLine($"Player {i + 1}\n");
         }
         
         _playerLobbyListText.text = sb.ToString();
