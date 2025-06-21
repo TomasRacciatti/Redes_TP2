@@ -19,7 +19,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _turnText;
     [SerializeField] private GameObject _actionButtons;
 
-    [Header("Players")] [SerializeField] private TextMeshProUGUI _playerListText;
+    [Header("Players")] 
+    [SerializeField] private TextMeshProUGUI _playerListText;
+    [SerializeField] private TextMeshProUGUI _playerLobbyListText;
 
     [Header("Round Information")] [SerializeField]
     private GameObject _roundInfoPanel;
@@ -77,7 +79,16 @@ public class UIManager : MonoBehaviour
 
     public void UpdateSessionLobby(List<PlayerController> players)
     {
+        _playerLobbyListText.text = "";
         
+        var sb = new System.Text.StringBuilder();
+
+        for (int i = 0; i < players.Count; i++)
+        {
+            sb.AppendLine($"Player {i + 1}");
+        }
+        
+        _playerListText.text = sb.ToString();
     }
 
     public void UpdateRolledDice(List<int> rolledValues)

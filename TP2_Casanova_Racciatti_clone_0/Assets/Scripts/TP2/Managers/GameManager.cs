@@ -10,7 +10,8 @@ public class GameManager : NetworkBehaviour
 {
     public static GameManager Instance { get; private set; }
     
-    [SerializeField] private PlayerSpawner _playerSpawner;
+    private PlayerSpawner _playerSpawner;
+    [SerializeField] private GameObject _gameStartOverlay;
 
     [Networked] public int currentClaimQuantity { get; set; }
     [Networked] public int currentClaimFace { get; set; }
@@ -27,6 +28,7 @@ public class GameManager : NetworkBehaviour
 
     private bool _isFirstTurn;
     private bool _gameStarted;
+    
 
     
     private void OnEnable()
@@ -60,6 +62,7 @@ public class GameManager : NetworkBehaviour
         if (!_players.Contains(player))
         {
             _players.Add(player);
+            UIManager.Instance.UpdateSessionLobby(_players);
         }
 
         if (HasStateAuthority) // Sacar esto, hacer TryStartGame publica y llamarla con un boton
@@ -67,11 +70,26 @@ public class GameManager : NetworkBehaviour
             //TryStartGame();
         }
     }
-
-    public void TryStartGame() // Lo llamamos por boton
+    
+    public void OnStartButtonClicked() // Lo llamamos por boton
     {
-        if (_gameStarted || _players.Count < 2) return; // Necesito que el boton solo lo pueda apretar el que tiene SA
+        if (!HasStateAuthority) return;
+
+        RPC_RequestStartGame();
+    }
+    
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    private void RPC_RequestStartGame()
+    {
+        TryStartGame();
+    }
+
+    private void TryStartGame()
+    {
+        if (_gameStarted || _players.Count < 2) return;
         _gameStarted = true;
+        _gameStartOverlay.SetActive(false);
+        
         StartCoroutine(DelayedStart());
     }
 
