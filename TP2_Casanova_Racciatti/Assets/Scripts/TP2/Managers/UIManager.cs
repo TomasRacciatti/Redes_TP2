@@ -88,7 +88,7 @@ public class UIManager : MonoBehaviour
             sb.AppendLine($"Player {i + 1}");
         }
         
-        _playerListText.text = sb.ToString();
+        _playerLobbyListText.text = sb.ToString();
     }
 
     public void UpdateRolledDice(List<int> rolledValues)

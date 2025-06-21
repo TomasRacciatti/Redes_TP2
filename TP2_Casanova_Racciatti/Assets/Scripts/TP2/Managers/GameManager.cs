@@ -64,11 +64,6 @@ public class GameManager : NetworkBehaviour
             _players.Add(player);
             UIManager.Instance.UpdateSessionLobby(_players);
         }
-
-        if (HasStateAuthority) // Sacar esto, hacer TryStartGame publica y llamarla con un boton
-        {
-            //TryStartGame();
-        }
     }
     
     public void OnStartButtonClicked() // Lo llamamos por boton
