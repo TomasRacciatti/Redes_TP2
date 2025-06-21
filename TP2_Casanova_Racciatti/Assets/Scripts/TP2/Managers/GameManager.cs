@@ -62,7 +62,7 @@ public class GameManager : NetworkBehaviour
             _players.Add(player);
         }
 
-        if (HasStateAuthority)
+        if (HasStateAuthority) // Sacar esto, hacer TryStartGame publica y llamarla con un boton
         {
             TryStartGame();
         }
