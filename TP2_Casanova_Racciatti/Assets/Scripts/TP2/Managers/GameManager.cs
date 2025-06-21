@@ -90,10 +90,10 @@ public class GameManager : NetworkBehaviour
 
     private void AssignTurnIDs()
     {
-        var ordered = ActivePlayers();
+        var alive = ActivePlayers();
 
         int id = 1;
-        foreach (var p in ordered)
+        foreach (var p in alive)
             p.myTurnId = id++;
     }
     
@@ -212,10 +212,17 @@ public class GameManager : NetworkBehaviour
     {
         var alive = ActivePlayers();
 
+        if (!alive.Any(p => p.myTurnId == currentTurnId))
+        {
+            currentTurnId = alive[0].myTurnId;
+            turnAuthority = alive[0].Object.InputAuthority;
+            return;
+        }
+        
         int index = alive.FindIndex(p => p.myTurnId == currentTurnId);
         int nextIdx = (index + 1) % alive.Count;
+        
         var next = alive[nextIdx];
-
         turnAuthority = next.Object.InputAuthority;
         currentTurnId = next.myTurnId;
 
@@ -311,7 +318,21 @@ public class GameManager : NetworkBehaviour
         
         loser.RPC_NotifyDiceLost(loser.RemainingDice);
 
-        RPC_StartGame(loser.Object.InputAuthority, loserID);
+        AssignTurnIDs();
+
+        var alive = ActivePlayers();
+        PlayerController nextStarter = null;
+        
+        if (loser != null && loser.IsAlive)
+        {
+            nextStarter = loser;
+        }
+        else
+        {
+            nextStarter = alive.First();
+        }
+
+        RPC_StartGame(nextStarter.Object.InputAuthority, nextStarter.myTurnId);
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
@@ -388,6 +409,8 @@ public class GameManager : NetworkBehaviour
 
         var player = GetPlayerController(client);
         RemoveFromList(player);
+        AssignTurnIDs();
+        RPC_AdvanceTurn();
 
         if (_players.Count == 1 && HasStateAuthority)
         {
