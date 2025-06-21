@@ -12,7 +12,7 @@ public class PlayerController : NetworkBehaviour
     
     [Networked] public int RemainingDice { get; set; }
 
-    public List<int> RolledDice { get; private set; } = new List<int>();
+    public List<int> RolledDice { get; set; } = new List<int>();
 
     public bool IsAlive => RemainingDice > 0;
 
@@ -46,7 +46,15 @@ public class PlayerController : NetworkBehaviour
             UIManager.Instance?.UpdateTurnIndicator();
         }
     }
+    
+    [Rpc(RpcSources.StateAuthority, RpcTargets.InputAuthority)]
+    public void RPC_ReceiveRolledDice(int[] diceValues)
+    {
+        RolledDice = new List<int>(diceValues);
+        UIManager.Instance.UpdateRolledDice(RolledDice);
+    }
 
+    /*
     public void RollDice()
     {
         if (!HasInputAuthority)
@@ -67,7 +75,7 @@ public class PlayerController : NetworkBehaviour
     private void RPC_SyncRolledDice(int[] diceValues)
     {
         RolledDice = new List<int>(diceValues);
-    }
+    }*/
     
     
     [Rpc(RpcSources.StateAuthority, RpcTargets.InputAuthority)]

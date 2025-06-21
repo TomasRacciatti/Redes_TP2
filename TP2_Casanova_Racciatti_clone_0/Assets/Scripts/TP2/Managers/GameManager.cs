@@ -117,13 +117,9 @@ public class GameManager : NetworkBehaviour
         turnAuthority = firstAuthority;
         currentTurnId = firstTurnId;
 
-        foreach (var player in _players)
+        if (HasStateAuthority)
         {
-            if (player.HasInputAuthority)
-                player.RollDice();
-
-            if (player.HasInputAuthority)
-                UIManager.Instance.UpdateRolledDice(player.RolledDice);
+            RollAllPlayersDice();
         }
 
         UIManager.Instance.UpdateDiceCounts(_players);
@@ -134,6 +130,21 @@ public class GameManager : NetworkBehaviour
     private void RPC_StartGame(PlayerRef firstAuthority, int firstTurnId)
     {
         StartRound(firstAuthority, firstTurnId);
+    }
+    
+    private void RollAllPlayersDice()
+    {
+        foreach (var player in _players)
+        {
+            var rolled = new int[player.RemainingDice];
+            for (int i = 0; i < player.RemainingDice; i++)
+            {
+                rolled[i] = UnityEngine.Random.Range(1, 7);
+            }
+            player.RolledDice = new List<int>(rolled);
+            
+            player.RPC_ReceiveRolledDice(rolled);
+        }
     }
 
     public void RequestNextTurn()
