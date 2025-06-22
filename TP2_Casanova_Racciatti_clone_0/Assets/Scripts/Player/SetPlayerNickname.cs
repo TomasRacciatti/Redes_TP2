@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Fusion;
@@ -5,17 +6,61 @@ using UnityEngine;
 
 public class SetPlayerNickname : NetworkBehaviour
 {
+    [Networked] private NetworkString<_16> CurrentNickname {get; set;}
+
+    private ChangeDetector _changeDetector;
+
+    public event Action onLeft;
+    
     public override void Spawned()
     {
-        NetworkString<_16> loadedNickname;
+        _changeDetector = GetChangeDetector(ChangeDetector.Source.SimulationState);
         
-        if (PlayerPrefs.HasKey("PlayerNickname"))
+        if (HasInputAuthority)
         {
-            loadedNickname = PlayerPrefs.GetString("PlayerNickname");
+            NetworkString<_16> loadedNickname;
+            
+            if (PlayerPrefs.HasKey("PlayerNickname"))
+            {
+                loadedNickname = PlayerPrefs.GetString("PlayerNickname");
+            }
+            else
+            {
+                loadedNickname = $"Player {Runner.LocalPlayer.PlayerId}";
+            }
+
+            RPC_SendNickname(loadedNickname);
         }
-        else
+    }
+    
+    public override void Despawned(NetworkRunner runner, bool hasState)
+    {
+        onLeft?.Invoke();
+    }
+
+    public override void Render()
+    {
+        foreach (var change in _changeDetector.DetectChanges(this))
         {
-            loadedNickname = $"Player {Runner.LocalPlayer.PlayerId}";
+            switch (change)
+            {
+                case nameof(CurrentNickname):
+                {
+                    UpdateNickname();
+                    break;
+                }
+            }
         }
+    }
+
+    private void UpdateNickname()
+    {
+        
+    }
+
+    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)] 
+    private void RPC_SendNickname(NetworkString<_16> nickname)
+    {
+        CurrentNickname = nickname;
     }
 }
