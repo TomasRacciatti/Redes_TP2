@@ -26,6 +26,7 @@ public class MainMenuHandler : MonoBehaviour
     
     [Header("InputFields")] 
     [SerializeField] private TMP_InputField _sessionNameField;
+    [SerializeField] private TMP_InputField _nicknameField;
 
     private void Awake()
     {
@@ -39,11 +40,15 @@ public class MainMenuHandler : MonoBehaviour
             _connectingPanel.SetActive(false);
             _browserPanel.SetActive(true);
         };
+        
+        _nicknameField.characterLimit = 15;
     }
 
     private void JoinLobby()
     {
         _runnerHandler.JoinLobby();
+        
+        PlayerPrefs.SetString("PlayerNickname", _nicknameField.text);
         
         _mainMenuPanel.SetActive(false);
         _connectingPanel.SetActive(true);
