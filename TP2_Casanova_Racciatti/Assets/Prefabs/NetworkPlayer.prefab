@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5205868901158787137}
   - component: {fileID: 8982979698024168054}
   - component: {fileID: 455473921206433748}
+  - component: {fileID: -5027654949251685111}
   m_Layer: 0
   m_Name: NetworkPlayer
   m_TagString: Untagged
@@ -51,6 +52,7 @@ MonoBehaviour:
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 455473921206433748}
+  - {fileID: -5027654949251685111}
   ForceRemoteRenderTimeframe: 0
 --- !u!114 &455473921206433748
 MonoBehaviour:
@@ -66,3 +68,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _maxDice: 5
   _RemainingDice: 5
+  _myTurnId: 0
+--- !u!114 &-5027654949251685111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330827703157380714}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e3f0162922c7194199238a90e677a0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
