@@ -33,11 +33,18 @@ public class SetPlayerNickname : NetworkBehaviour
         }
     }
     
+    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)] 
+    private void RPC_SendNickname(NetworkString<_16> nickname)
+    {
+        CurrentNickname = nickname;
+    }
+    
     public override void Despawned(NetworkRunner runner, bool hasState)
     {
         onLeft?.Invoke();
     }
 
+    /*
     public override void Render()
     {
         foreach (var change in _changeDetector.DetectChanges(this))
@@ -57,10 +64,7 @@ public class SetPlayerNickname : NetworkBehaviour
     {
         
     }
+    */
 
-    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)] 
-    private void RPC_SendNickname(NetworkString<_16> nickname)
-    {
-        CurrentNickname = nickname;
-    }
+    
 }
