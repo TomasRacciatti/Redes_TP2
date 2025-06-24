@@ -62,6 +62,9 @@ public class GameManager : NetworkBehaviour
         if (!_players.Contains(player))
         {
             _players.Add(player);
+            
+            player.SuscribeToNameUpdate(() => UIManager.Instance.UpdateSessionLobby(_players));
+            
             UIManager.Instance.UpdateSessionLobby(_players);
         }
     }
@@ -305,12 +308,12 @@ public class GameManager : NetworkBehaviour
         return Tuple.Create(claimFace, actualQty, honest);
     }
 
-    public List<Tuple<int, int>> GetPlayerDiceTuples()
+    public List<Tuple<string, int>> GetPlayerDiceTuples()
     {
         return _players
             .Where(p => p.IsAlive)
             .OrderBy(p => p.myTurnId)
-            .Select(p => Tuple.Create(p.myTurnId, p.RemainingDice))
+            .Select(p => Tuple.Create(p.Nickname, p.RemainingDice))
             .ToList();
     }
 

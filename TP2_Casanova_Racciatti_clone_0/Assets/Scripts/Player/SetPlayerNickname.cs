@@ -6,10 +6,11 @@ using UnityEngine;
 
 public class SetPlayerNickname : NetworkBehaviour
 {
-    [Networked] private NetworkString<_16> CurrentNickname {get; set;}
+    [Networked] public NetworkString<_16> CurrentNickname {get; set;}
 
     private ChangeDetector _changeDetector;
 
+    public event Action onNameUpdated;
     public event Action onLeft;
     
     public override void Spawned()
@@ -31,6 +32,11 @@ public class SetPlayerNickname : NetworkBehaviour
 
             RPC_SendNickname(loadedNickname);
         }
+        else
+        {
+            // Actializar el nombre manualmente
+            // Llamar al nickname item y pasarle el valor que tiene current nickname
+        }
     }
     
     [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)] 
@@ -44,7 +50,7 @@ public class SetPlayerNickname : NetworkBehaviour
         onLeft?.Invoke();
     }
 
-    /*
+    
     public override void Render()
     {
         foreach (var change in _changeDetector.DetectChanges(this))
@@ -53,18 +59,11 @@ public class SetPlayerNickname : NetworkBehaviour
             {
                 case nameof(CurrentNickname):
                 {
-                    UpdateNickname();
+                    onNameUpdated?.Invoke();
                     break;
                 }
             }
         }
     }
-
-    private void UpdateNickname()
-    {
-        
-    }
-    */
-
     
 }

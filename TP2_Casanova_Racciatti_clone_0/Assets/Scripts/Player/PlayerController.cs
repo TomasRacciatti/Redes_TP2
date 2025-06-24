@@ -18,8 +18,13 @@ public class PlayerController : NetworkBehaviour
 
     [Networked, OnChangedRender(nameof(OnTurnIdChanged))]
     public int myTurnId { get; set; }
+
+    public string Nickname => GetComponent<SetPlayerNickname>().CurrentNickname.Value;
     
-    [Networked] public string Nickname { get; private set; }
+    public void SuscribeToNameUpdate(Action callback)
+    {
+        GetComponent<SetPlayerNickname>().onNameUpdated += callback;
+    }
 
 
     public override void Spawned()
