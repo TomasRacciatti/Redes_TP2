@@ -48,7 +48,7 @@ public class UIManager : MonoBehaviour
         _localPlayer = player;
     }
 
-    public void UpdateClaim(int quantity, int face)
+    public void UpdateClaim(int quantity, int face) // Que incluya el nickname
     {
         _claimAmountText.text = quantity.ToString();
         _currentClaimDie.ShowValue(face);
@@ -58,12 +58,12 @@ public class UIManager : MonoBehaviour
     {
         if (_localPlayer == null) return;
 
-        bool isMyTurn = _localPlayer.myTurnId == GameManager.Instance.currentTurnId;
+        bool isMyTurn = _localPlayer.MyTurnId == GameManager.Instance.currentTurnId;
 
         _turnOverlay.SetActive(!isMyTurn);
         _actionButtons.SetActive(isMyTurn);
 
-        _turnText.text = $"Player {GameManager.Instance.currentTurnId}'s turn";
+        _turnText.text = $"Player {GameManager.Instance.currentTurnId}'s turn"; // Cambiar al nickname
     }
 
     public void UpdateDiceCounts(List<PlayerController> players)
@@ -71,7 +71,7 @@ public class UIManager : MonoBehaviour
         var diceTuples = GameManager.Instance.GetPlayerDiceTuples();
         
         var lines = diceTuples
-            .Select(t => $"Player {t.Item1}: {t.Item2}")
+            .Select(t => $"{t.Item1}: {t.Item2}")
             .ToList();
 
         _playerListText.text = string.Join("\n", lines);
@@ -121,7 +121,7 @@ public class UIManager : MonoBehaviour
             ClaimText = $"Claim: {claimFace} → {claimQuantity}",
             
             LoserText = honest
-                ? $"Claim was honest. Player {loserTurnId} loses a die"
+                ? $"Claim was honest. Player {loserTurnId} loses a die" // Incluir nickname
                 : $"Claim was a lie.     Player {loserTurnId} loses a die"
         };
         

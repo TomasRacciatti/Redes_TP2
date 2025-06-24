@@ -21,7 +21,7 @@ public class GameManager : NetworkBehaviour
     public int currentTurnId { get; set; }
 
     private int _lastTurnID;
-    private PlayerController LastPlayer => _players.First(p => p.myTurnId == _lastTurnID);
+    private PlayerController LastPlayer => _players.First(p => p.MyTurnId == _lastTurnID);
 
     private List<PlayerController> _players = new List<PlayerController>();
     public IReadOnlyList<PlayerController> Players => _players;
@@ -63,7 +63,7 @@ public class GameManager : NetworkBehaviour
         {
             _players.Add(player);
             
-            player.SuscribeToNameUpdate(() => UIManager.Instance.UpdateSessionLobby(_players));
+            player.SubscribeToNameUpdate(() => UIManager.Instance.UpdateSessionLobby(_players));
             
             UIManager.Instance.UpdateSessionLobby(_players);
         }
@@ -97,7 +97,7 @@ public class GameManager : NetworkBehaviour
 
         int id = 1;
         foreach (var p in alive)
-            p.myTurnId = id++;
+            p.MyTurnId = id++;
     }
     
     public void HandlePlayerDisconnected(PlayerRef player)
@@ -109,7 +109,7 @@ public class GameManager : NetworkBehaviour
         
         if (playerController != null)
         {
-            wasCurrentTurn = playerController.myTurnId == currentTurnId;
+            wasCurrentTurn = playerController.MyTurnId == currentTurnId;
         }
         
         RPC_RemovePlayer(player);
@@ -118,7 +118,7 @@ public class GameManager : NetworkBehaviour
         
         var alive = ActivePlayers();
         
-        if (wasCurrentTurn || !alive.Any(p => p.myTurnId == currentTurnId))
+        if (wasCurrentTurn || !alive.Any(p => p.MyTurnId == currentTurnId))
         {
             AdvanceTurnHostAuthoritative();
         }
@@ -171,7 +171,7 @@ public class GameManager : NetworkBehaviour
                 alive.Count); // Si tengo mas de 2 jugadores, esto lo voy a tener que settear tambien cuando muere un jugador
             var first = alive[idx];
 
-            RPC_StartGame(first.Object.InputAuthority, first.myTurnId);
+            RPC_StartGame(first.Object.InputAuthority, first.MyTurnId);
         }
     }
 
@@ -248,13 +248,13 @@ public class GameManager : NetworkBehaviour
         var alive = ActivePlayers();
         if (alive.Count == 0) return;
 
-        int index = alive.FindIndex(p => p.myTurnId == currentTurnId);
+        int index = alive.FindIndex(p => p.MyTurnId == currentTurnId);
 
         int nextIdx = (index + 1) % alive.Count;
 
         var next = alive[nextIdx];
 
-        RPC_AdvanceTurn(next.myTurnId, next.Object.InputAuthority);
+        RPC_AdvanceTurn(next.MyTurnId, next.Object.InputAuthority);
     }
 
     private void UpdateUI()
@@ -293,11 +293,11 @@ public class GameManager : NetworkBehaviour
         int actualQty = claimResult.Item2;
         bool honest = claimResult.Item3;
 
-        var caller = _players.First(p => p.myTurnId == currentTurnId);
+        var caller = _players.First(p => p.MyTurnId == currentTurnId);
         var claimant = LastPlayer;
         var loser = honest ? caller : claimant;
 
-        StartCoroutine(RoundSummaryRoutineAndAdvance(loser.myTurnId));
+        StartCoroutine(RoundSummaryRoutineAndAdvance(loser.MyTurnId));
     }
 
     private Tuple<int, int, bool> CheckClaim(int claimFace, int claimQuantity)
@@ -312,7 +312,7 @@ public class GameManager : NetworkBehaviour
     {
         return _players
             .Where(p => p.IsAlive)
-            .OrderBy(p => p.myTurnId)
+            .OrderBy(p => p.MyTurnId)
             .Select(p => Tuple.Create(p.Nickname, p.RemainingDice))
             .ToList();
     }
@@ -335,7 +335,7 @@ public class GameManager : NetworkBehaviour
 
         yield return new WaitForSeconds(3.5f);
 
-        var loser = _players.First(p => p.myTurnId == loserID);
+        var loser = _players.First(p => p.MyTurnId == loserID);
         
         loser.RemainingDice--;
         
@@ -360,7 +360,7 @@ public class GameManager : NetworkBehaviour
             nextStarter = alive.First();
         }
 
-        RPC_StartGame(nextStarter.Object.InputAuthority, nextStarter.myTurnId);
+        RPC_StartGame(nextStarter.Object.InputAuthority, nextStarter.MyTurnId);
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]

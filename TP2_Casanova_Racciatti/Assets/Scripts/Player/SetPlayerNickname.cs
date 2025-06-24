@@ -10,8 +10,8 @@ public class SetPlayerNickname : NetworkBehaviour
 
     private ChangeDetector _changeDetector;
 
-    public event Action onNameUpdated;
-    public event Action onLeft;
+    public event Action OnNameUpdated;
+    public event Action OnLeft;
     
     public override void Spawned()
     {
@@ -32,11 +32,6 @@ public class SetPlayerNickname : NetworkBehaviour
 
             RPC_SendNickname(loadedNickname);
         }
-        else
-        {
-            // Actializar el nombre manualmente
-            // Llamar al nickname item y pasarle el valor que tiene current nickname
-        }
     }
     
     [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)] 
@@ -47,7 +42,7 @@ public class SetPlayerNickname : NetworkBehaviour
     
     public override void Despawned(NetworkRunner runner, bool hasState)
     {
-        onLeft?.Invoke();
+        OnLeft?.Invoke();
     }
 
     
@@ -59,7 +54,7 @@ public class SetPlayerNickname : NetworkBehaviour
             {
                 case nameof(CurrentNickname):
                 {
-                    onNameUpdated?.Invoke();
+                    OnNameUpdated?.Invoke();
                     break;
                 }
             }

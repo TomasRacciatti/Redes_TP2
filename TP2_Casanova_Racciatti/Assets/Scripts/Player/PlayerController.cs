@@ -17,13 +17,13 @@ public class PlayerController : NetworkBehaviour
     public bool IsAlive => RemainingDice > 0;
 
     [Networked, OnChangedRender(nameof(OnTurnIdChanged))]
-    public int myTurnId { get; set; }
+    public int MyTurnId { get; set; }
 
     public string Nickname => GetComponent<SetPlayerNickname>().CurrentNickname.Value;
     
-    public void SuscribeToNameUpdate(Action callback)
+    public void SubscribeToNameUpdate(Action callback)
     {
-        GetComponent<SetPlayerNickname>().onNameUpdated += callback;
+        GetComponent<SetPlayerNickname>().OnNameUpdated += callback;
     }
 
 
