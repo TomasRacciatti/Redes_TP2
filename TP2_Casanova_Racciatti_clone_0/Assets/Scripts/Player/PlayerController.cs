@@ -18,6 +18,8 @@ public class PlayerController : NetworkBehaviour
 
     [Networked, OnChangedRender(nameof(OnTurnIdChanged))]
     public int myTurnId { get; set; }
+    
+    [Networked] public string Nickname { get; private set; }
 
 
     public override void Spawned()
