@@ -1370,7 +1370,7 @@ MonoBehaviour:
   _winnerOverlay: {fileID: 5130862577330396931}
   _loserOverlay: {fileID: 5130862577330396930}
   _GameOverButtons: {fileID: 444228012}
-  _distributionPerPlayerText: {fileID: 0}
+  _distributionPerPlayerText: {fileID: 226948709}
   _audioSource: {fileID: 1112033690}
   _honestClaimClip: {fileID: 8300000, guid: e7552f84d049ed54b9c14d5553cc32ec, type: 3}
   _bluffClip: {fileID: 8300000, guid: a1ad7a00181490d44ab8fe349c85c81d, type: 3}
@@ -2569,10 +2569,10 @@ PrefabInstance:
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 3996510786603174055, guid: e2d85cbcf15c4094fb8a6f39e95f0221, type: 3}
       insertIndex: 6
-      addedObject: {fileID: 1314436311}
-    - targetCorrespondingSourceObject: {fileID: 3996510786603174055, guid: e2d85cbcf15c4094fb8a6f39e95f0221, type: 3}
-      insertIndex: 9
       addedObject: {fileID: 1144407160}
+    - targetCorrespondingSourceObject: {fileID: 3996510786603174055, guid: e2d85cbcf15c4094fb8a6f39e95f0221, type: 3}
+      insertIndex: 7
+      addedObject: {fileID: 1314436311}
     - targetCorrespondingSourceObject: {fileID: 5346760633200836817, guid: e2d85cbcf15c4094fb8a6f39e95f0221, type: 3}
       insertIndex: -1
       addedObject: {fileID: 444228013}

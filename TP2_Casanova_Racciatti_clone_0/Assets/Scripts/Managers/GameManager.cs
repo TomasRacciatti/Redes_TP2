@@ -192,9 +192,17 @@ public class GameManager : NetworkBehaviour
             RollAllPlayersDice();
         }
 
-        //UIManager.Instance.UpdateSpectatorDiceBreakdown(ActivePlayers());
+        StartCoroutine(DelayedSpectatorUpdate());
+        
         UIManager.Instance.UpdateDiceCounts(_players);
         UpdateUI();
+    }
+    
+    private IEnumerator DelayedSpectatorUpdate()
+    {
+        yield return null;
+        
+        UIManager.Instance.UpdateSpectatorDiceBreakdown(ActivePlayers());
     }
 
     [Rpc(RpcSources.All, RpcTargets.All)]
