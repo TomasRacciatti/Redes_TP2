@@ -64,7 +64,11 @@ public class UIManager : MonoBehaviour
         _turnOverlay.SetActive(!isMyTurn);
         _actionButtons.SetActive(isMyTurn);
 
-        _turnText.text = $"Player {GameManager.Instance.currentTurnId}'s turn"; // Cambiar al nickname
+        var turnPlayer = GameManager.Instance.Players
+            .FirstOrDefault(p => p.MyTurnId == GameManager.Instance.currentTurnId);
+
+        string name = turnPlayer != null ? turnPlayer.Nickname : $"Player {GameManager.Instance.currentTurnId}";
+        _turnText.text = $"{name}'s turn";
     }
 
     public void UpdateDiceCounts(List<PlayerController> players)
