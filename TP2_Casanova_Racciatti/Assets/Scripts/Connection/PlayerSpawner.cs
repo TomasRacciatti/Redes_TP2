@@ -15,6 +15,13 @@ public class PlayerSpawner : MonoBehaviour, INetworkRunnerCallbacks
     {
         if (runner.IsServer)
         {
+            if (GameManager.Instance != null && GameManager.Instance.GameHasStarted)
+            {
+                Debug.LogWarning($"Rejecting late joiner {player}, game already started");
+                runner.Disconnect(player);
+                return;
+            }
+            
             var playerObject = runner.Spawn(_playerPrefab, Vector3.zero, Quaternion.identity, inputAuthority: player); // No hace falta poner el InputAuthority: pero me gusta tenerlo para legibilidad
             var nicknameComponent = playerObject.GetComponent<SetPlayerNickname>();
             

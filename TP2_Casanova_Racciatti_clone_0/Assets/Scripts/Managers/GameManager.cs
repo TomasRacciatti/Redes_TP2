@@ -29,8 +29,8 @@ public class GameManager : NetworkBehaviour
 
     private bool _isFirstTurn;
     private bool _gameStarted;
+    public bool GameHasStarted => _gameStarted;
     
-
     
     private void OnEnable()
     {
@@ -192,6 +192,7 @@ public class GameManager : NetworkBehaviour
             RollAllPlayersDice();
         }
 
+        //UIManager.Instance.UpdateSpectatorDiceBreakdown(ActivePlayers());
         UIManager.Instance.UpdateDiceCounts(_players);
         UpdateUI();
     }

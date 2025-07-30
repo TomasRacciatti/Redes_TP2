@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using System.Linq;
+using System.Text;
 
 public class UIManager : MonoBehaviour
 {
@@ -35,6 +36,9 @@ public class UIManager : MonoBehaviour
     [Header("Game Over")] [SerializeField] private GameObject _winnerOverlay;
     [SerializeField] private GameObject _loserOverlay;
     [SerializeField] private GameObject _GameOverButtons;
+    
+    [Header("Spectate")]
+    [SerializeField] private TextMeshProUGUI _distributionPerPlayerText;
     
     [Header("Audio")]
     [SerializeField] private AudioSource _audioSource;
@@ -93,6 +97,37 @@ public class UIManager : MonoBehaviour
             .ToList();
 
         _playerListText.text = string.Join("\n", lines);
+    }
+
+    public void UpdateSpectatorDiceBreakdown(List<PlayerController> players)
+    {
+        if (_localPlayer != null && _localPlayer.IsAlive)
+        {
+            _distributionPerPlayerText.text = "";
+            return;
+        }
+        
+        StringBuilder sb = new StringBuilder();
+        
+        foreach (var player in players.Where(p => p.IsAlive))
+        {
+            string name = player.Nickname;
+            var dice = player.RolledDice;
+
+            var faceCount = new int[6];
+            foreach (var face in dice)
+            {
+                if (face >= 1 && face <= 6)
+                    faceCount[face - 1]++;
+            }
+
+            sb.AppendLine($"{name}:");
+            sb.AppendLine(string.Join(", ", Enumerable.Range(1, 6).Select(i => $"{i}: {faceCount[i - 1]}")));
+            sb.AppendLine();
+        }
+
+        _distributionPerPlayerText.text = sb.ToString();
+        
     }
 
     public void UpdateSessionLobby(List<PlayerController> players)
