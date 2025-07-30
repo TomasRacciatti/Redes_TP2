@@ -35,6 +35,11 @@ public class UIManager : MonoBehaviour
     [Header("Game Over")] [SerializeField] private GameObject _winnerOverlay;
     [SerializeField] private GameObject _loserOverlay;
     [SerializeField] private GameObject _GameOverButtons;
+    
+    [Header("Audio")]
+    [SerializeField] private AudioSource _audioSource;
+    [SerializeField] private AudioClip _honestClaimClip;
+    [SerializeField] private AudioClip _bluffClip;
 
 
     private PlayerController _localPlayer;
@@ -121,6 +126,12 @@ public class UIManager : MonoBehaviour
     {
         distribution.TryGetValue(claimFace, out var claimCount);
         var honest = claimCount >= claimQuantity;
+        
+        if (_audioSource != null)
+        {
+            _audioSource.clip = honest ? _honestClaimClip : _bluffClip;
+            _audioSource.Play();
+        }
         
         var loserName = GameManager.Instance.GetNicknameFromTurnId(loserTurnId);
         
