@@ -34,8 +34,8 @@ public class SetPlayerNickname : NetworkBehaviour
         }
     }
     
-    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)] 
-    private void RPC_SendNickname(NetworkString<_16> nickname)
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    public void RPC_SendNickname(NetworkString<_16> nickname)
     {
         CurrentNickname = nickname;
     }

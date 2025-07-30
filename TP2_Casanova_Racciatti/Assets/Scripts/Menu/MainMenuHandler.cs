@@ -49,6 +49,7 @@ public class MainMenuHandler : MonoBehaviour
         _runnerHandler.JoinLobby();
         
         PlayerPrefs.SetString("PlayerNickname", _nicknameField.text);
+        LocalPlayerData.Instance.SetNickname(_nicknameField.text);
         
         _mainMenuPanel.SetActive(false);
         _connectingPanel.SetActive(true);

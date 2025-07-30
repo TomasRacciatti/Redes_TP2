@@ -15,7 +15,19 @@ public class PlayerSpawner : MonoBehaviour, INetworkRunnerCallbacks
     {
         if (runner.IsServer)
         {
-            runner.Spawn(_playerPrefab, Vector3.zero, Quaternion.identity, inputAuthority: player); // No hace falta poner el InputAuthority: pero me gusta tenerlo para legibilidad
+            var playerObject = runner.Spawn(_playerPrefab, Vector3.zero, Quaternion.identity, inputAuthority: player); // No hace falta poner el InputAuthority: pero me gusta tenerlo para legibilidad
+            var nicknameComponent = playerObject.GetComponent<SetPlayerNickname>();
+            
+            if (player == runner.LocalPlayer && LocalPlayerData.Instance != null)
+            {
+                string nickname = LocalPlayerData.Instance.Nickname;
+                nicknameComponent.RPC_SendNickname(nickname);
+            }
+            else
+            {
+                string fallback = $"Player {player.PlayerId}";
+                nicknameComponent.RPC_SendNickname(fallback);
+            }
         }
     }
 
