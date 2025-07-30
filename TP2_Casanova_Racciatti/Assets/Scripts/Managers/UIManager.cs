@@ -32,6 +32,7 @@ public class UIManager : MonoBehaviour
 
     [Header("Game Over")] [SerializeField] private GameObject _winnerOverlay;
     [SerializeField] private GameObject _loserOverlay;
+    [SerializeField] private GameObject _GameOverButtons;
 
 
     private PlayerController _localPlayer;
@@ -58,7 +59,7 @@ public class UIManager : MonoBehaviour
     {
         if (_localPlayer == null) return;
 
-        bool isMyTurn = _localPlayer.MyTurnId == GameManager.Instance.currentTurnId;
+        bool isMyTurn = _localPlayer.MyTurnId > 0 && _localPlayer.MyTurnId == GameManager.Instance.currentTurnId;
 
         _turnOverlay.SetActive(!isMyTurn);
         _actionButtons.SetActive(isMyTurn);
@@ -162,11 +163,13 @@ public class UIManager : MonoBehaviour
     public void ShowDefeatOverlay()
     {
         _loserOverlay.SetActive(true);
+        _GameOverButtons.SetActive(true);
     }
 
     public void ShowVictoryOverlay()
     {
         _winnerOverlay.SetActive(true);
+        _GameOverButtons.SetActive(true);
     }
 
     public void OnReturnToMenuButtonClicked()

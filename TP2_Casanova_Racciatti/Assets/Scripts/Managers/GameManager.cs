@@ -407,6 +407,7 @@ public class GameManager : NetworkBehaviour
 
         var player = GetPlayerController(client);
         RemoveFromList(player);
+        player.MyTurnId = -1; // Limpiamos su turno para que no siga teniendo un turno cuando spectea
         AssignTurnIDs();
         AdvanceTurnHostAuthoritative();
 
