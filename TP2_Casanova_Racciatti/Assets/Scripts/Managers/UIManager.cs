@@ -168,4 +168,26 @@ public class UIManager : MonoBehaviour
     {
         _winnerOverlay.SetActive(true);
     }
+
+    public void OnReturnToMenuButtonClicked()
+    {
+        if (GameManager.Instance != null && GameManager.Instance.Runner.IsServer)
+        {
+
+            if (GameManager.Instance.Players.Count > 1)
+            {
+                return;
+            }
+        }
+
+        StartCoroutine(ReturnToMenuRoutine());
+    }
+    
+    private IEnumerator ReturnToMenuRoutine()
+    {
+        yield return GameManager.Instance.Runner.Shutdown();
+        
+        UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
+    }
+    
 }

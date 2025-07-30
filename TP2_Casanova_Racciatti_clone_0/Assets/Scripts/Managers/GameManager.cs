@@ -414,14 +414,6 @@ public class GameManager : NetworkBehaviour
         {
             RPC_Win(_players[0].Object.InputAuthority);
         }
-
-        // Agregar un boton para desconectarse. No hace falta que sea aca, pero la logica es:
-        /*
-        if (!Object.HasInputAuthority)
-        {
-            Runner.Disconnect(Object.InputAuthority);
-        }
-        */
     }
 
     [Rpc]
