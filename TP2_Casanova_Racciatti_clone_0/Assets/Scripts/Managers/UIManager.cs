@@ -12,7 +12,9 @@ public class UIManager : MonoBehaviour
     [Header("Player Dice UI")] [SerializeField]
     private List<DieDisplay> _rolledDiceDisplays;
 
-    [Header("Claim")] [SerializeField] private TextMeshProUGUI _claimAmountText;
+    [Header("Claim")] 
+    [SerializeField] private TextMeshProUGUI _claimantText;
+    [SerializeField] private TextMeshProUGUI _claimAmountText;
     [SerializeField] private DieDisplay _currentClaimDie;
 
     [Header("Turn")] [SerializeField] private GameObject _turnOverlay;
@@ -51,6 +53,12 @@ public class UIManager : MonoBehaviour
 
     public void UpdateClaim(int quantity, int face) // Que incluya el nickname
     {
+        var lastPlayer  = GameManager.Instance.Players
+            .FirstOrDefault(p => p.MyTurnId == GameManager.Instance.LastTurnId);
+        
+        string name = lastPlayer != null ? lastPlayer.Nickname : $"Player {GameManager.Instance.LastTurnId}";
+
+        _claimantText.text = $"{name}'s claim: ";
         _claimAmountText.text = quantity.ToString();
         _currentClaimDie.ShowValue(face);
     }
@@ -114,6 +122,8 @@ public class UIManager : MonoBehaviour
         distribution.TryGetValue(claimFace, out var claimCount);
         var honest = claimCount >= claimQuantity;
         
+        var loserName = GameManager.Instance.GetNicknameFromTurnId(loserTurnId);
+        
         var summaryInfo = new
         {
             Rows = Enumerable.Range(1, 6)
@@ -126,8 +136,8 @@ public class UIManager : MonoBehaviour
             ClaimText = $"Claim: {claimFace} → {claimQuantity}",
             
             LoserText = honest
-                ? $"Claim was honest. Player {loserTurnId} loses a die" // Incluir nickname
-                : $"Claim was a lie.     Player {loserTurnId} loses a die"
+                ? $"Claim was honest.\n{loserName} loses a die"
+                : $"Claim was a lie.\n{loserName} loses a die"
         };
         
         var sb = new System.Text.StringBuilder();

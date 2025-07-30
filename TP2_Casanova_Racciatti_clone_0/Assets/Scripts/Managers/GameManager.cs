@@ -21,6 +21,7 @@ public class GameManager : NetworkBehaviour
     public int currentTurnId { get; set; }
 
     private int _lastTurnID;
+    public int LastTurnId => _lastTurnID;
     private PlayerController LastPlayer => _players.First(p => p.MyTurnId == _lastTurnID);
 
     private List<PlayerController> _players = new List<PlayerController>();
@@ -427,5 +428,12 @@ public class GameManager : NetworkBehaviour
     private PlayerController GetPlayerController(PlayerRef client)
     {
         return _players.FirstOrDefault(p => p.Object.InputAuthority == client);
+    }
+    
+    // Helper para obtener el Nickname desde el TurnID
+    public string GetNicknameFromTurnId(int turnId)
+    {
+        var p = _players.FirstOrDefault(p => p.MyTurnId == turnId);
+        return p?.Nickname ?? $"Player {turnId}";
     }
 }
