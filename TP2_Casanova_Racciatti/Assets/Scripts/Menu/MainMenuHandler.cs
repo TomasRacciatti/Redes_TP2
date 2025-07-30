@@ -48,8 +48,15 @@ public class MainMenuHandler : MonoBehaviour
     {
         _runnerHandler.JoinLobby();
         
-        PlayerPrefs.SetString("PlayerNickname", _nicknameField.text);
-        LocalPlayerData.Instance.SetNickname(_nicknameField.text);
+        string inputName = _nicknameField.text;
+        
+        if (string.IsNullOrWhiteSpace(inputName))
+        {
+            inputName = $"Guest_{UnityEngine.Random.Range(100, 999)}";
+        }
+        
+        PlayerPrefs.SetString("PlayerNickname", inputName);
+        LocalPlayerData.Instance.SetNickname(inputName);
         
         _mainMenuPanel.SetActive(false);
         _connectingPanel.SetActive(true);
