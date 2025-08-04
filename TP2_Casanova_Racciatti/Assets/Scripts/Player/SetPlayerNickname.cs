@@ -13,12 +13,14 @@ public class SetPlayerNickname : NetworkBehaviour
     public event Action OnNameUpdated;
     public event Action OnLeft;
     
+    
     public override void Spawned()
     {
         _changeDetector = GetChangeDetector(ChangeDetector.Source.SimulationState);
         
         if (HasInputAuthority)
         {
+            /*
             NetworkString<_16> loadedNickname;
             
             if (PlayerPrefs.HasKey("PlayerNickname"))
@@ -31,14 +33,37 @@ public class SetPlayerNickname : NetworkBehaviour
             }
 
             RPC_SendNickname(loadedNickname);
+            */
+            
+            string nickname = LocalPlayerData.Instance.Nickname;
+            
+            if (string.IsNullOrWhiteSpace(nickname))
+            {
+                nickname = $"Player {Runner.LocalPlayer.PlayerId}";
+            }
+
+            RPC_RequestSetNickname(nickname);
         }
     }
     
-    [Rpc(RpcSources.All, RpcTargets.All)]
+    /*
+    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
     public void RPC_SendNickname(NetworkString<_16> nickname)
     {
         CurrentNickname = nickname;
     }
+    */
+    
+    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+    private void RPC_RequestSetNickname(string nickname)
+    {
+        if (HasStateAuthority)
+        {
+            CurrentNickname = nickname;
+            OnNameUpdated?.Invoke();
+        }
+    }
+    
     
     public override void Despawned(NetworkRunner runner, bool hasState)
     {
@@ -50,15 +75,10 @@ public class SetPlayerNickname : NetworkBehaviour
     {
         foreach (var change in _changeDetector.DetectChanges(this))
         {
-            switch (change)
+            if (change == nameof(CurrentNickname))
             {
-                case nameof(CurrentNickname):
-                {
-                    OnNameUpdated?.Invoke();
-                    break;
-                }
+                OnNameUpdated?.Invoke();
             }
         }
     }
-    
 }

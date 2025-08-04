@@ -11,6 +11,8 @@ public class PlayerSpawner : MonoBehaviour, INetworkRunnerCallbacks
     
     public event Action<PlayerRef> OnPlayerDisconnected;
     
+    private readonly Queue<string> _pendingNicknames = new();
+    
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
         if (runner.IsServer)
@@ -22,19 +24,7 @@ public class PlayerSpawner : MonoBehaviour, INetworkRunnerCallbacks
                 return;
             }
             
-            var playerObject = runner.Spawn(_playerPrefab, Vector3.zero, Quaternion.identity, inputAuthority: player); // No hace falta poner el InputAuthority: pero me gusta tenerlo para legibilidad
-            var nicknameComponent = playerObject.GetComponent<SetPlayerNickname>();
-            
-            if (player == runner.LocalPlayer && LocalPlayerData.Instance != null)
-            {
-                string nickname = LocalPlayerData.Instance.Nickname;
-                nicknameComponent.RPC_SendNickname(nickname);
-            }
-            else
-            {
-                string fallback = $"Player {player.PlayerId}";
-                nicknameComponent.RPC_SendNickname(fallback);
-            }
+            runner.Spawn(_playerPrefab, Vector3.zero, Quaternion.identity, inputAuthority: player); // No hace falta poner el InputAuthority: pero me gusta tenerlo para legibilidad
         }
     }
 
@@ -48,12 +38,22 @@ public class PlayerSpawner : MonoBehaviour, INetworkRunnerCallbacks
         runner.Shutdown();
     }
     
+    public void OnConnectRequest(NetworkRunner runner, NetworkRunnerCallbackArgs.ConnectRequest request, byte[] token)
+    {
+        if (token != null && token.Length > 0)
+        {
+            string nickname = System.Text.Encoding.UTF8.GetString(token);
+            _pendingNicknames.Enqueue(nickname);
+        }
+
+        request.Accept();
+    }
+    
     public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList) { }
     public void OnInput(NetworkRunner runner, NetworkInput input) { }
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
     public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason) { }
     public void OnConnectedToServer(NetworkRunner runner) { }
-    public void OnConnectRequest(NetworkRunner runner, NetworkRunnerCallbackArgs.ConnectRequest request, byte[] token) { }
     public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason) { }
     public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message) { }
     public void OnCustomAuthenticationResponse(NetworkRunner runner, Dictionary<string, object> data) { }

@@ -55,6 +55,9 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
     async Task InitializeGame(GameMode gameMode, string sessionName, int sceneIndex = 0, int maxPlayers = 5)
     {
         _currentRunner.ProvideInput = true;
+        
+        string nickname = PlayerPrefs.GetString("PlayerNickname", $"Player_{UnityEngine.Random.Range(100, 999)}");
+        byte[] token = System.Text.Encoding.UTF8.GetBytes(nickname);
 
         var result = await _currentRunner.StartGame(new StartGameArgs()
         {
@@ -62,6 +65,8 @@ public class NetworkRunnerHandler : MonoBehaviour, INetworkRunnerCallbacks
             Scene = SceneRef.FromIndex(sceneIndex),
             SessionName = sessionName,
             PlayerCount = maxPlayers,
+            
+            ConnectionToken = token
         });
 
         if (!result.Ok)
