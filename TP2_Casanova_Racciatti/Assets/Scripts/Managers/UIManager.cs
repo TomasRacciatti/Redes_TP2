@@ -122,7 +122,7 @@ public class UIManager : MonoBehaviour
             }
 
             sb.AppendLine($"{name}:");
-            sb.AppendLine(string.Join(", ", Enumerable.Range(1, 6).Select(i => $"{i}: {faceCount[i - 1]}")));
+            sb.AppendLine(string.Join(", ", Enumerable.Range(1, 6).Select(i => $"{i}→{faceCount[i - 1]}")));
             sb.AppendLine();
         }
 
