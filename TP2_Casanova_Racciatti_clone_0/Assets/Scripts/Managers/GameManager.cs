@@ -223,6 +223,8 @@ public class GameManager : NetworkBehaviour
             player.RolledDice = new List<int>(rolled);
             
             player.RPC_ReceiveRolledDice(rolled);
+            
+            player.RPC_SyncRolledDiceToAllClients(rolled);
         }
     }
 

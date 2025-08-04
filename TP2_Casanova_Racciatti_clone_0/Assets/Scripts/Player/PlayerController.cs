@@ -59,6 +59,23 @@ public class PlayerController : NetworkBehaviour
         UIManager.Instance.UpdateRolledDice(RolledDice);
     }
     
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public void RPC_SyncRolledDiceToAllClients(int[] diceValues)
+    {
+        RolledDice = new List<int>(diceValues);
+
+        if (HasInputAuthority)
+        {
+            UIManager.Instance.UpdateRolledDice(RolledDice);
+        }
+
+        if (!IsAlive) return;
+
+        if (UIManager.Instance != null && !HasInputAuthority)
+        {
+            UIManager.Instance.UpdateSpectatorDiceBreakdown(GameManager.Instance.Players.ToList());
+        }
+    }
     
     [Rpc(RpcSources.StateAuthority, RpcTargets.InputAuthority)]
     public void RPC_NotifyDiceLost(int newRemaining)
