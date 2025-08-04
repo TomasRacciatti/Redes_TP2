@@ -282,8 +282,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 60
-  m_fontSizeBase: 60
+  m_fontSize: 45
+  m_fontSizeBase: 45
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -318,7 +318,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: -358.64276, y: -262.89648, z: -358.64267, w: -266.1421}
+  m_margin: {x: -358.64276, y: -262.89648, z: -358.6427, w: -266.1421}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -2282,19 +2282,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3028122106789628929, guid: e2d85cbcf15c4094fb8a6f39e95f0221, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3028122106789628929, guid: e2d85cbcf15c4094fb8a6f39e95f0221, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3028122106789628929, guid: e2d85cbcf15c4094fb8a6f39e95f0221, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 146.70497
       objectReference: {fileID: 0}
     - target: {fileID: 3028122106789628929, guid: e2d85cbcf15c4094fb8a6f39e95f0221, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -223.45
       objectReference: {fileID: 0}
     - target: {fileID: 3064693086606880850, guid: e2d85cbcf15c4094fb8a6f39e95f0221, type: 3}
       propertyPath: m_SizeDelta.y
@@ -2446,7 +2446,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6641353625349057366, guid: e2d85cbcf15c4094fb8a6f39e95f0221, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6859728010266898789, guid: e2d85cbcf15c4094fb8a6f39e95f0221, type: 3}
       propertyPath: m_text
