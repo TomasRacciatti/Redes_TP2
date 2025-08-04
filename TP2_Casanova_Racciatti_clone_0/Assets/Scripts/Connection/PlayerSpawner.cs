@@ -38,17 +38,7 @@ public class PlayerSpawner : MonoBehaviour, INetworkRunnerCallbacks
         runner.Shutdown();
     }
     
-    public void OnConnectRequest(NetworkRunner runner, NetworkRunnerCallbackArgs.ConnectRequest request, byte[] token)
-    {
-        if (token != null && token.Length > 0)
-        {
-            string nickname = System.Text.Encoding.UTF8.GetString(token);
-            _pendingNicknames.Enqueue(nickname);
-        }
-
-        request.Accept();
-    }
-    
+    public void OnConnectRequest(NetworkRunner runner, NetworkRunnerCallbackArgs.ConnectRequest request, byte[] token) { }
     public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList) { }
     public void OnInput(NetworkRunner runner, NetworkInput input) { }
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
